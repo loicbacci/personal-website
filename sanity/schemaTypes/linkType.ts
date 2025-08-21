@@ -26,7 +26,8 @@ export const linkType = defineType({
       title: 'URL',
       name: 'url',
       type: 'url',
-      validation: (rule) => rule.required(),
+      validation: (rule) =>
+        rule.required().uri({ scheme: ['http', 'https', 'mailto'] }),
     }),
   ],
 });

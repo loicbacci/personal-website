@@ -1,27 +1,29 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import React from 'react';
-import { Provider } from '@/components/ui/provider';
+import Layout from '@/components/Layout';
+import { getIndexInfo } from '@/sanity/lib/api';
 
 export const metadata: Metadata = {
   title: 'loicbacci.me',
   description: 'Personal Website of Loïc Baccigalupi',
 };
 
-// Setup chakra theme
-// const config = defineConfig({
-//   theme: {},
-// });
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const info = await getIndexInfo();
+
+  if (!info) {
+    return 'Invalid data';
+  }
+
   return (
     <html lang='en' suppressHydrationWarning>
       <body>
-        <Provider>{children}</Provider>
+        <Layout headerInfo={info}>{children}</Layout>
       </body>
     </html>
   );

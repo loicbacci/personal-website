@@ -3,15 +3,13 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "sanity:typegen": "sanity schema extract --enforce-required-fields --path sanity/schemaTypes/extract.json && sanity typegen generate"
   },
   "dependencies": {
-    "@chakra-ui/react": "^3.25.0",
-    "@emotion/react": "^11.14.0",
     "@portabletext/react": "^3.2.1",
     "@sanity/client": "7.8.2",
     "@sanity/image-url": "1",

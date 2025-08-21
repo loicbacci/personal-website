@@ -5,9 +5,6 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [{ hostname: 'cdn.sanity.io' }],
   },
-  experimental: {
-    optimizePackageImports: ['@chakra-ui/react'],
-  },
 };
 
 export default nextConfig;
