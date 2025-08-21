@@ -4,6 +4,7 @@ import React from 'react';
 import Layout from '@/components/Layout';
 import { getIndexInfo } from '@/sanity/lib/api';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Analytics } from '@vercel/analytics/next';
 
 export const metadata: Metadata = {
   title: 'loicbacci.me',
@@ -26,6 +27,7 @@ export default async function RootLayout({
       <body>
         <Layout headerInfo={info}>{children}</Layout>
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
