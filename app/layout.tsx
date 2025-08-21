@@ -3,6 +3,7 @@ import './globals.css';
 import React from 'react';
 import Layout from '@/components/Layout';
 import { getIndexInfo } from '@/sanity/lib/api';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 export const metadata: Metadata = {
   title: 'loicbacci.me',
@@ -24,6 +25,7 @@ export default async function RootLayout({
     <html lang='en' suppressHydrationWarning>
       <body>
         <Layout headerInfo={info}>{children}</Layout>
+        <SpeedInsights />
       </body>
     </html>
   );
