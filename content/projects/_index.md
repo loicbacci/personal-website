@@ -2,4 +2,4 @@
 title = "Projects"
 +++
 
-Test projects page.
+List of my projects.

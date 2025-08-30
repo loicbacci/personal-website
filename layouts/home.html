@@ -1,11 +1,70 @@
-{{- /*
-The home page.
-*/}}
+{{- /* The home page. */}}
 
 {{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-    {{ .Summary }}
-  {{ end }}
+  <div class='flex flex-col gap-4 lg:gap-10'>
+    {{- /* BIO */}}
+    {{ with .Content }}
+      <section class="bio">
+        {{ . }}
+      </section>
+    {{ end }}
+
+
+    {{- /* EDUCATION */}}
+    <section class='flex flex-col gap-4 lg:gap-6'>
+      {{ $education := where $.Site.RegularPages "Section" "education" }}
+      <h2>Education</h2>
+      <div
+        class='flex flex-col gap-2 pb-2'>
+        {{ range .Site.Params.education }}
+          {{ if .minor }}
+            {{ $subtitle := printf "%s %s" .major .minor }}
+            {{ partial "card.html" (
+              dict
+                "title" .school
+                "subtitle" $subtitle
+                "subsubtitle" (printf "%s %s" .start_date .end_date)
+              )
+            }}
+          {{ else }}
+            {{ $subtitle := .major }}
+            {{ partial "card.html" (
+              dict
+                "title" .school
+                "subtitle" $subtitle
+                "subsubtitle" (printf "%s %s" .start_date .end_date)
+              )
+            }}
+          {{ end }}
+
+
+        {{ end }}
+      </div>
+    </section>
+
+
+    {{- /* PROJECTS */}}
+    <section class='flex flex-col gap-4 lg:gap-6'>
+      {{ $projects := where $.Site.RegularPages "Section" "projects" }}
+      <h2>Projects</h2>
+      <div
+        class='grid gap-2 lg:gap-4 grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 pb-2'>
+        {{ range $projects }}
+          {{ partial "card.html" (
+            dict
+              "title" .LinkTitle
+              "subtitle" .Description
+              "href" .RelPermalink
+            )
+          }}
+        {{ end }}
+      </div>
+    </section>
+
+    {{- /* Links */}}
+    <section class='flex flex-col gap-4'>
+      <h2>Links</h2>
+      {{ partial "link-list.html" (dict "links" .Site.Params.links) }}
+    </section>
+  </div>
 {{ end }}

@@ -1,0 +1,27 @@
+{{- /*
+Renders a single link with its optional icon.
+
+@context {string} name The name of the link.
+@context {string} href The href of the link.
+@context {string} icon The name of the icon.
+@context {string} vendor The vendor of the icon.
+
+@example: {{ partial "icon-link.html" (dict "name" .name "href" .href "icon" .icon "vendor" .vendor) }}
+*/}}
+
+{{- $icon := .icon }}
+{{- $href := .href }}
+{{- $vendor := .vendor }}
+{{- $name := .name }}
+
+<a class="icon-link flex flex-row gap-1.5" alt={{ $name }} href={{ $href }}>
+  {{ if and $icon $vendor }}
+    {{ $ctx := dict
+      "vendor" $vendor
+      "name" $icon
+      "size" "24px"
+    }}
+    <span>{{ partial "icons/icon" $ctx }}</span>
+  {{ end }}
+  <span class="font-[500] lg:text-lg">{{ $name }}</span>
+</a>

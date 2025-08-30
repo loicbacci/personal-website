@@ -8,13 +8,10 @@ Defines structure of the HTML.
 <head>
   {{ partial "head.html" . }}
 </head>
-<body class="container pb-10 pt-8 lg:pt-16 mb-10 mx-auto px-4 lg:px-20 flex flex-col gap-2">
+<body class="container pt-8 lg:pt-16 mb-10 mx-auto px-4 lg:px-20 flex flex-col gap-2">
   {{ partial "header.html" . }}
-  <main>
+  <main class='flex pb-10 flex-col space-y-2'>
     {{ block "main" . }}{{ end }}
   </main>
-  <footer>
-    {{ partial "footer.html" . }}
-  </footer>
 </body>
 </html>

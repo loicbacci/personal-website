@@ -1,0 +1,15 @@
+{{- /*
+Renders a single link with its optional icon.
+
+@context {string} links The list of links.
+
+@example: {{ partial "link-list.html" (dict "links" .links) }}
+*/}}
+
+{{- $links := .links }}
+
+<div class='flex flex-col lg:flex-row gap-3 lg:gap-8 flex-wrap items-start'>
+  {{ range $links }}
+    {{ partial "icon-link.html" (dict "name" .name "href" .href "icon" .icon "vendor" .vendor) }}
+  {{ end }}
+</div>

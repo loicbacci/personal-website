@@ -1,0 +1,39 @@
+{{- /*
+Renders a card.
+
+@context {string} href The href of the card.
+@context {string} title The title of the card.
+@context {string} subtitle The subtitle of the card.
+@context {string} subsubtitle The subsubtitle of the card.
+
+@example: {{ partial "card.html" (dict "title" .title "subtitle" .subtitle "subsubtitle" .subsubtitle "href" .href) }}
+*/}}
+
+{{- $href := .href }}
+{{- $title := .title }}
+{{- $subtitle := .subtitle }}
+{{- $subsubtitle := .subsubtitle }}
+
+{{ if $href }}
+<a href="{{ $href }}">
+  {{ end }}
+
+  {{ if $href }}
+  <div class='flex flex-col card cursor-pointer'>
+    {{ else }}
+    <div class='flex flex-col card'>
+      {{ end }}
+      {{ if $title }}
+        <p class='card-title'>{{ $title }}</p>
+      {{ end }}
+      {{ if $subtitle }}
+        <p class='card-subtitle'>{{ $subtitle }}</p>
+      {{ end }}
+      {{ if $subsubtitle }}
+        <p class="card-subsubtitle">{{ $subsubtitle }}</p>
+      {{ end }}
+    </div>
+    {{ if $href }}
+</a>
+{{ end }}
+

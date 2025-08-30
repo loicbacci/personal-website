@@ -5,21 +5,55 @@ title = 'loicbacci'
 [params]
   name = "Loïc Baccigalupi"
   subtitle = "MSc ETH Zürich - EPFL in Cyber Security"
+  [[params.links]]
+    name = "GitHub"
+    href = "https://github.com/loicbacci"
+    icon = "github"
+    vendor = "feather"
+  [[params.links]]
+    name = "LinkedIn"
+    href = "https://www.linkedin.com/in/loicbacci"
+    icon = "linkedin"
+    vendor = "feather"
+  [[params.links]]
+    name = "Email"
+    href = "mailto:loic.baccigalupi@gmail.com"
+    icon = "mail"
+    vendor = "feather"
+
+  [[params.education]]
+    school = "ETH Zürich - EPFL"
+    major = "MSc Cyber Security"
+    minor = "(minor in Machine Intelligence)"
+    start_date = "Sep 2022"
+    end_date = "May 2025"
+
+  [[params.education]]
+    school = "EPFL"
+    major = "BSc Communication Systems"
+    start_date = "Sep 2019"
+    end_date = "Aug 2022"
+
 
 [build]
-    [build.buildStats]
-        enable = true
-    [[build.cachebusters]]
-        source = 'assets/notwatching/hugo_stats\.json'
-        target = 'css'
-    [[build.cachebusters]]
-        source = '(postcss|tailwind)\.config\.js'
-        target = 'css'
+  [build.buildStats]
+    enable = true
+  [[build.cachebusters]]
+    source = 'assets/notwatching/hugo_stats\.json'
+    target = 'css'
+  [[build.cachebusters]]
+    source = '(postcss|tailwind)\.config\.js'
+    target = 'css'
+
 [module]
-    [[module.mounts]]
-        source = 'assets'
-        target = 'assets'
-    [[module.mounts]]
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'
+  [[module.mounts]]
     disableWatch = true
-        source = 'hugo_stats.json'
-        target = 'assets/notwatching/hugo_stats.json'
+    source = 'hugo_stats.json'
+    target = 'assets/notwatching/hugo_stats.json'
+  [[module.imports]]
+    path = 'github.com/hugomods/icons/vendors/feather'
+  [[module.imports]]
+    path = 'github.com/hugomods/icons/vendors/tabler'
