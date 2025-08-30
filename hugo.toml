@@ -2,6 +2,12 @@ baseURL = 'https://loicbacci.me/'
 languageCode = 'en-us'
 title = 'loicbacci'
 
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
+
+
 [params]
   name = "Loïc Baccigalupi"
   subtitle = "MSc ETH Zürich - EPFL in Cyber Security"
