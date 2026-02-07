@@ -4,14 +4,14 @@ import ProjectList from '@/components/ProjectsList';
 export default async function Projects() {
   const projectsInfo = await getAllProjectsInfo();
 
-  if (!projectsInfo) {
-    return <div>Oups</div>;
-  }
-
   return (
     <section className='flex flex-col space-y-2'>
       <h2 className='pb-2'>Projects</h2>
-      <ProjectList projectsInfo={projectsInfo} />
+      {projectsInfo.length > 0 ? (
+        <ProjectList projectsInfo={projectsInfo} />
+      ) : (
+        <p>No projects published yet.</p>
+      )}
     </section>
   );
 }

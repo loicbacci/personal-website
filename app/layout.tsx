@@ -5,6 +5,9 @@ import Layout from '@/components/Layout';
 import { getIndexInfo } from '@/sanity/lib/api';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Analytics } from '@vercel/analytics/next';
+import { SanityLive } from '@/sanity/lib/live';
+import { VisualEditing } from 'next-sanity';
+import { draftMode } from 'next/headers';
 
 export const metadata: Metadata = {
   title: 'loicbacci.me',
@@ -17,15 +20,14 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const info = await getIndexInfo();
-
-  if (!info) {
-    return 'Invalid data';
-  }
+  const { isEnabled } = await draftMode();
 
   return (
-    <html lang='en' suppressHydrationWarning>
+    <html lang='en'>
       <body>
         <Layout headerInfo={info}>{children}</Layout>
+        <SanityLive />
+        {isEnabled && <VisualEditing />}
         <SpeedInsights />
         <Analytics />
       </body>

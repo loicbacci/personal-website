@@ -4,15 +4,26 @@ import { SanityImageSource } from '@sanity/image-url/lib/types/types';
 import { PortableText } from '@portabletext/react';
 
 const myBr = () => <div className='py-1' />;
+type PortableTextImage = SanityImageSource & { alt?: string };
 
 const comps = {
   marks: {
     br: myBr,
   },
   types: {
-    image: ({ value }: { value: SanityImageSource }) => {
+    image: ({ value }: { value: PortableTextImage }) => {
       const url = urlFor(value).url();
-      return <Image src={url} alt='' objectFit='contain' />;
+      const alt = value.alt?.trim() || 'Project image';
+      return (
+        <Image
+          src={url}
+          alt={alt}
+          width={1600}
+          height={900}
+          sizes='(min-width: 1280px) 50rem, (min-width: 1024px) 42rem, 100vw'
+          style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+        />
+      );
     },
   },
 };

@@ -1,15 +1,18 @@
 import { getAllProjectsInfo, getIndexInfo } from '@/sanity/lib/api';
 import Link from 'next/link';
-import { DynamicIcon } from 'lucide-react/dynamic';
+import { DynamicIcon, IconName } from 'lucide-react/dynamic';
+import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import ProjectList from '@/components/ProjectsList';
+
+const iconNameSet = new Set<string>(Object.keys(dynamicIconImports));
+
+const isIconName = (value: string): value is IconName => {
+  return iconNameSet.has(value);
+};
 
 export default async function Home() {
   const info = await getIndexInfo();
   const projectsInfo = await getAllProjectsInfo();
-
-  if (!info || !info.links || !projectsInfo) {
-    return 'Invalid data';
-  }
 
   return (
     <div className='flex flex-col gap-10 pt-4'>
@@ -18,18 +21,17 @@ export default async function Home() {
         <ProjectList projectsInfo={projectsInfo} />
       </section>
 
-      {info.links.length > 0 && (
+      {info?.links && info.links.length > 0 && (
         <section className='flex flex-col gap-4'>
           <h2>Links</h2>
 
           <div className='flex flex-col lg:flex-row gap-4 lg:gap-8 flex-wrap items-start'>
             {info.links.map((l) => (
-              <Link href={l.url} key={l.url}>
-                <div className='icon-link'>
-                  {/*// @ts-expect-error: is in fact the right value*/}
-                  {l.icon && <DynamicIcon name={l.icon} className='m-auto' />}
-                  <span>{l.title}</span>
-                </div>
+              <Link href={l.url} key={l._key} className='icon-link'>
+                {l.icon && isIconName(l.icon) ? (
+                  <DynamicIcon name={l.icon} className='m-auto' aria-hidden='true' />
+                ) : null}
+                <span>{l.title}</span>
               </Link>
             ))}
           </div>

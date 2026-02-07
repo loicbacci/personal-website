@@ -1,4 +1,3 @@
-import { client } from '@/sanity/lib/client';
 import {
   INDEX_INFO_QUERYResult,
   PROJECT_QUERYResult,
@@ -7,16 +6,18 @@ import {
   PROJECTS_INFO_QUERYResult,
 } from '@/sanity/lib/types';
 import { defineQuery } from 'next-sanity';
+import { hasSanityConfig } from '@/sanity/env';
+import { sanityFetch } from '@/sanity/lib/live';
 
 const INDEX_INFO_QUERY = defineQuery(
-  '*[_type == "index-info"][0]{ name, content, links, profileImage }'
+  '*[_type == "index-info"][0]{ name, content, links, profileImage{asset, hotspot, crop, alt} }'
 );
 
 const PROJECTS_INFO_QUERY = defineQuery(
-  '*[_type == "project"] | order(_updatedAt) { "slug": slug.current, title, description, _updatedAt }'
+  '*[_type == "project" && defined(slug.current)] | order(_updatedAt desc) { "slug": slug.current, title, description, _updatedAt }'
 );
 const PROJECT_SLUGS_QUERY = defineQuery(
-  '*[_type == "project"]{ "slug": slug.current }'
+  '*[_type == "project" && defined(slug.current)]{ "slug": slug.current }'
 );
 
 const PROJECT_TITLE_QUERY = defineQuery(
@@ -24,27 +25,65 @@ const PROJECT_TITLE_QUERY = defineQuery(
 );
 
 const PROJECT_QUERY = defineQuery(
-  '*[_type == "project" && slug.current == $slug][0]'
+  '*[_type == "project" && slug.current == $slug][0]{ title, body, links }'
 );
 
 export const getAllProjectSlugs = async () => {
-  return await client.fetch<PROJECT_SLUGS_QUERYResult>(PROJECT_SLUGS_QUERY);
+  if (!hasSanityConfig) {
+    return [];
+  }
+  const { data } = await sanityFetch({
+    query: PROJECT_SLUGS_QUERY,
+    perspective: 'published',
+    stega: false,
+  });
+
+  return data satisfies PROJECT_SLUGS_QUERYResult;
 };
 
 export const getProjectTitle = async (slug: string) => {
-  return await client.fetch<PROJECT_TITLE_QUERYResult>(PROJECT_TITLE_QUERY, {
-    slug,
+  if (!hasSanityConfig) {
+    return null;
+  }
+  const { data } = await sanityFetch({
+    query: PROJECT_TITLE_QUERY,
+    params: { slug },
+    stega: false,
   });
+
+  return data satisfies PROJECT_TITLE_QUERYResult;
 };
 
 export const getProject = async (slug: string) => {
-  return await client.fetch<PROJECT_QUERYResult>(PROJECT_QUERY, { slug });
+  if (!hasSanityConfig) {
+    return null;
+  }
+  const { data } = await sanityFetch({
+    query: PROJECT_QUERY,
+    params: { slug },
+  });
+
+  return data satisfies PROJECT_QUERYResult;
 };
 
 export const getIndexInfo = async () => {
-  return await client.fetch<INDEX_INFO_QUERYResult>(INDEX_INFO_QUERY);
+  if (!hasSanityConfig) {
+    return null;
+  }
+  const { data } = await sanityFetch({
+    query: INDEX_INFO_QUERY,
+  });
+
+  return data satisfies INDEX_INFO_QUERYResult;
 };
 
 export const getAllProjectsInfo = async () => {
-  return await client.fetch<PROJECTS_INFO_QUERYResult>(PROJECTS_INFO_QUERY);
+  if (!hasSanityConfig) {
+    return [];
+  }
+  const { data } = await sanityFetch({
+    query: PROJECTS_INFO_QUERY,
+  });
+
+  return data satisfies PROJECTS_INFO_QUERYResult;
 };

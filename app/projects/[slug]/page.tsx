@@ -5,14 +5,21 @@ import {
 } from '@/sanity/lib/api';
 import MyPortableText from '@/components/portableText';
 import { Metadata } from 'next';
-import { DynamicIcon } from 'lucide-react/dynamic';
+import { DynamicIcon, IconName } from 'lucide-react/dynamic';
+import dynamicIconImports from 'lucide-react/dynamicIconImports';
 import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
 
 export const revalidate = 60;
+const iconNameSet = new Set<string>(Object.keys(dynamicIconImports));
+
+const isIconName = (value: string): value is IconName => {
+  return iconNameSet.has(value);
+};
 
 export async function generateStaticParams() {
   return await getAllProjectSlugs();
@@ -35,7 +42,7 @@ export default async function Project({ params }: Props) {
   const projectData = await getProject(slug);
 
   if (!projectData) {
-    return 'Data not found';
+    notFound();
   }
 
   return (
@@ -50,12 +57,11 @@ export default async function Project({ params }: Props) {
         {projectData.links &&
           projectData.links.map((l) => {
             return (
-              <Link href={l.url} key={l.url}>
-                <div className='icon-link'>
-                  {/* @ts-expect-error: is in fact the right value*/}
-                  {l.icon && <DynamicIcon name={l.icon} className='m-auto' />}
-                  <span>{l.title}</span>
-                </div>
+              <Link href={l.url} key={l._key} className='icon-link'>
+                {l.icon && isIconName(l.icon) ? (
+                  <DynamicIcon name={l.icon} className='m-auto' aria-hidden='true' />
+                ) : null}
+                <span>{l.title}</span>
               </Link>
             );
           })}

@@ -48,6 +48,7 @@ export type IndexInfo = {
     media?: unknown;
     hotspot?: SanityImageHotspot;
     crop?: SanityImageCrop;
+    alt: string;
     _type: 'image';
   };
   links?: Array<
@@ -74,24 +75,48 @@ export type Project = {
   title: string;
   slug: Slug;
   description: string;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: 'span';
-      _key: string;
-    }>;
-    style?: 'normal' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'blockquote';
-    listItem?: 'bullet' | 'number';
-    markDefs?: Array<{
-      href?: string;
-      _type: 'link';
-      _key: string;
-    }>;
-    level?: number;
-    _type: 'block';
-    _key: string;
-  }>;
+  body?: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: 'span';
+          _key: string;
+        }>;
+        style?:
+          | 'normal'
+          | 'h1'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'h5'
+          | 'h6'
+          | 'blockquote';
+        listItem?: 'bullet' | 'number';
+        markDefs?: Array<{
+          href?: string;
+          _type: 'link';
+          _key: string;
+        }>;
+        level?: number;
+        _type: 'block';
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: 'image';
+        _key: string;
+      }
+  >;
   links?: Array<
     {
       _key: string;
@@ -238,7 +263,7 @@ export type AllSanitySchemaTypes =
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./sanity/lib/api.ts
 // Variable: INDEX_INFO_QUERY
-// Query: *[_type == "index-info"][0]{ name, content, links, profileImage }
+// Query: *[_type == "index-info"][0]{ name, content, links, profileImage{asset, hotspot, crop, alt} }
 export type INDEX_INFO_QUERYResult = {
   name: string;
   content: Array<{
@@ -265,20 +290,19 @@ export type INDEX_INFO_QUERYResult = {
     } & Link
   > | null;
   profileImage: {
-    asset?: {
+    asset: {
       _ref: string;
       _type: 'reference';
       _weak?: boolean;
       [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
-    };
-    media?: unknown;
-    hotspot?: SanityImageHotspot;
-    crop?: SanityImageCrop;
-    _type: 'image';
+    } | null;
+    hotspot: SanityImageHotspot | null;
+    crop: SanityImageCrop | null;
+    alt: string;
   };
 } | null;
 // Variable: PROJECTS_INFO_QUERY
-// Query: *[_type == "project"] | order(_updatedAt) { "slug": slug.current, title, description, _updatedAt }
+// Query: *[_type == "project" && defined(slug.current)] | order(_updatedAt desc) { "slug": slug.current, title, description, _updatedAt }
 export type PROJECTS_INFO_QUERYResult = Array<{
   slug: string;
   title: string;
@@ -286,7 +310,7 @@ export type PROJECTS_INFO_QUERYResult = Array<{
   _updatedAt: string;
 }>;
 // Variable: PROJECT_SLUGS_QUERY
-// Query: *[_type == "project"]{ "slug": slug.current }
+// Query: *[_type == "project" && defined(slug.current)]{ "slug": slug.current }
 export type PROJECT_SLUGS_QUERYResult = Array<{
   slug: string;
 }>;
@@ -296,49 +320,66 @@ export type PROJECT_TITLE_QUERYResult = {
   title: string;
 } | null;
 // Variable: PROJECT_QUERY
-// Query: *[_type == "project" && slug.current == $slug][0]
+// Query: *[_type == "project" && slug.current == $slug][0]{ title, body, links }
 export type PROJECT_QUERYResult = {
-  _id: string;
-  _type: 'project';
-  _createdAt: string;
-  _updatedAt: string;
-  _rev: string;
   title: string;
-  slug: Slug;
-  description: string;
-  body?: Array<{
-    children?: Array<{
-      marks?: Array<string>;
-      text?: string;
-      _type: 'span';
-      _key: string;
-    }>;
-    style?: 'blockquote' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'normal';
-    listItem?: 'bullet' | 'number';
-    markDefs?: Array<{
-      href?: string;
-      _type: 'link';
-      _key: string;
-    }>;
-    level?: number;
-    _type: 'block';
-    _key: string;
-  }>;
-  links?: Array<
+  body: Array<
+    | {
+        children?: Array<{
+          marks?: Array<string>;
+          text?: string;
+          _type: 'span';
+          _key: string;
+        }>;
+        style?:
+          | 'blockquote'
+          | 'h1'
+          | 'h2'
+          | 'h3'
+          | 'h4'
+          | 'h5'
+          | 'h6'
+          | 'normal';
+        listItem?: 'bullet' | 'number';
+        markDefs?: Array<{
+          href?: string;
+          _type: 'link';
+          _key: string;
+        }>;
+        level?: number;
+        _type: 'block';
+        _key: string;
+      }
+    | {
+        asset?: {
+          _ref: string;
+          _type: 'reference';
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: 'sanity.imageAsset';
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt: string;
+        _type: 'image';
+        _key: string;
+      }
+  > | null;
+  links: Array<
     {
       _key: string;
     } & Link
-  >;
+  > | null;
 } | null;
 
 // Query TypeMap
 import '@sanity/client';
 declare module '@sanity/client' {
   interface SanityQueries {
-    '*[_type == "index-info"][0]{ name, content, links, profileImage }': INDEX_INFO_QUERYResult;
-    '*[_type == "project"] | order(_updatedAt) { "slug": slug.current, title, description, _updatedAt }': PROJECTS_INFO_QUERYResult;
-    '*[_type == "project"]{ "slug": slug.current }': PROJECT_SLUGS_QUERYResult;
+    '*[_type == "index-info"][0]{ name, content, links, profileImage{asset, hotspot, crop, alt} }': INDEX_INFO_QUERYResult;
+    '*[_type == "project" && defined(slug.current)] | order(_updatedAt desc) { "slug": slug.current, title, description, _updatedAt }': PROJECTS_INFO_QUERYResult;
+    '*[_type == "project" && defined(slug.current)]{ "slug": slug.current }': PROJECT_SLUGS_QUERYResult;
     '*[_type == "project" && slug.current == $slug][0]{ title }': PROJECT_TITLE_QUERYResult;
-    '*[_type == "project" && slug.current == $slug][0]': PROJECT_QUERYResult;
+    '*[_type == "project" && slug.current == $slug][0]{ title, body, links }': PROJECT_QUERYResult;
   }
 }

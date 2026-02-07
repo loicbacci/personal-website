@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity';
+import { defineArrayMember, defineField, defineType } from 'sanity';
 
 export const indexInfoType = defineType({
   name: 'index-info',
@@ -15,20 +15,31 @@ export const indexInfoType = defineType({
       name: 'content',
       title: 'Content',
       type: 'array',
-      of: [{ type: 'block' }],
+      of: [defineArrayMember({ type: 'block' })],
       validation: (rule) => rule.required(),
     }),
     defineField({
       title: 'Profile image',
       name: 'profileImage',
       type: 'image',
+      options: {
+        hotspot: true,
+      },
+      fields: [
+        defineField({
+          name: 'alt',
+          title: 'Alt text',
+          type: 'string',
+          validation: (rule) => rule.required().min(5),
+        }),
+      ],
       validation: (rule) => rule.required(),
     }),
     defineField({
       name: 'links',
       title: 'Links',
       type: 'array',
-      of: [{ type: 'link' }],
+      of: [defineArrayMember({ type: 'link' })],
     }),
   ],
 });

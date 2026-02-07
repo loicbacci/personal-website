@@ -12,11 +12,9 @@ const ProjectList = ({ projectsInfo }: ProjectListProps) => (
       const href = `/projects/${slug}`;
 
       return (
-        <Link key={slug} href={href} passHref>
-          <div className='flex flex-col card cursor-pointer'>
-            <p className='primary-text font-semibold'>{title}</p>
-            <p className='description'>{description}</p>
-          </div>
+        <Link key={slug} href={href} className='card flex flex-col'>
+          <p className='primary-text font-semibold'>{title}</p>
+          <p className='description'>{description}</p>
         </Link>
       );
     })}

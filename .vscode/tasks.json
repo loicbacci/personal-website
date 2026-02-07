@@ -1,0 +1,48 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "dev",
+      "type": "shell",
+      "command": "yarn dev",
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "lint",
+      "type": "shell",
+      "command": "yarn lint",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "yarn build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "start",
+      "type": "shell",
+      "command": "yarn start",
+      "problemMatcher": []
+    },
+    {
+      "label": "sanity:typegen",
+      "type": "shell",
+      "command": "yarn sanity:typegen",
+      "problemMatcher": []
+    },
+    {
+      "label": "verify",
+      "type": "shell",
+      "command": "yarn lint && yarn build",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
